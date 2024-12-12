@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 import 'fragments/library_fragment.dart';
 import 'fragments/search_fragment.dart';
@@ -21,10 +22,52 @@ class HomeScreen extends StatelessWidget {
 
   final StatefulNavigationShell navigationShell;
 
+  Future<void> _requestAssets() async {
+
+    // Request permissions.
+    final PermissionState ps = await PhotoManager.requestPermissionExtend();
+
+    // Further requests can be only proceed with authorized or limited.
+    if (!ps.hasAccess) {
+
+      print('Permission is not accessible.');
+      return;
+    }
+    // Customize your own filter options.
+    final PMFilter filter = FilterOptionGroup(
+      imageOption: const FilterOption(
+        sizeConstraint: SizeConstraint(ignoreSize: true),
+      ),
+    );
+    // Obtain assets using the path entity.
+    final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(
+    );
+    // Return if not paths found.
+    if (paths.isEmpty) {
+      print('No paths found.');
+      return;
+    }
+    var _path = paths.first;
+    var _totalEntitiesCount = await _path.assetCountAsync;
+    final List<AssetEntity> entities = await _path.getAssetListPaged(
+      page: 0,
+      size: 1000,
+    );
+    print(_path);
+    print(_totalEntitiesCount);
+    for(AssetEntity entity in entities) {
+      print(entity.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.orientationOf(context) == Orientation.portrait
+    return MediaQuery.orientationOf(context) == Orientation.portrait // нормальное положение
         ? Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: _requestAssets,
+          child: const Icon(Icons.developer_board),
+        ),
             body: navigationShell,
             bottomNavigationBar: NavigationBar(
                 elevation: 3,
@@ -36,15 +79,20 @@ class HomeScreen extends StatelessWidget {
                         icon: destinations[index].icon,
                         label: destinations[index].label,
                         selectedIcon: destinations[index].selectedIcon))))
-        : Scaffold(
+        : Scaffold( // ютуб-положение
+      floatingActionButton: FloatingActionButton(
+        onPressed: _requestAssets,
+        child: const Icon(Icons.developer_board),
+      ),
             appBar: AppBar(
-              elevation: 3,
+              elevation: 1,
+              scrolledUnderElevation: 3,
               title: const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Row(
                   children: [
                     Icon(Icons.landscape),
-                    SizedBox(width: 8),
+                    SizedBox(width: 28),
                     Text("Beshence Gallery"),
                   ],
                 ),
@@ -61,9 +109,8 @@ class HomeScreen extends StatelessWidget {
                     fit: FlexFit.tight,
                     child: Material(
                       child: NavigationRail(
-                        backgroundColor: ElevationOverlay.applySurfaceTint(Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.surfaceTint, 3),
-                        extended: true,
-                        labelType: NavigationRailLabelType.none,
+                        backgroundColor: ElevationOverlay.applySurfaceTint(Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.surfaceTint, 1),
+                        labelType: NavigationRailLabelType.selected,
                         selectedIndex: navigationShell.currentIndex,
                         onDestinationSelected: (int index) =>
                             _onTap(context, index),
@@ -77,7 +124,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ]),
                 Expanded(child: navigationShell)
               ],
