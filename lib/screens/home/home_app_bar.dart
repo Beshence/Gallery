@@ -12,16 +12,17 @@ class HomeAppBar extends StatelessWidget {
       scrolledUnderElevation: 3,
       title: Row(
         children: [
-          const Icon(Icons.landscape),
-          const SizedBox(width: 8),
+          if (MediaQuery.orientationOf(context) == Orientation.portrait) const Icon(Icons.landscape),
+          if (MediaQuery.orientationOf(context) == Orientation.portrait) const SizedBox(width: 8),
           Text(title),
         ],
       ),
       floating: floating,
       pinned: !floating,
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle_outlined, size: 32)),
-        const SizedBox(width: 4),
+        //IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle_outlined, size: 32)),
+        //const SizedBox(width: 4),
+        PopupMenuItem(child: Icon(Icons.account_circle_outlined, size: 32), onTap: () {},)
       ],
     );
   }

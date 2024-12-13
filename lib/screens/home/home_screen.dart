@@ -23,13 +23,11 @@ class HomeScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   Future<void> _requestAssets() async {
-
     // Request permissions.
     final PermissionState ps = await PhotoManager.requestPermissionExtend();
 
     // Further requests can be only proceed with authorized or limited.
     if (!ps.hasAccess) {
-
       print('Permission is not accessible.');
       return;
     }
@@ -40,8 +38,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
     // Obtain assets using the path entity.
-    final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(
-    );
+    final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList();
     // Return if not paths found.
     if (paths.isEmpty) {
       print('No paths found.');
@@ -55,19 +52,20 @@ class HomeScreen extends StatelessWidget {
     );
     print(_path);
     print(_totalEntitiesCount);
-    for(AssetEntity entity in entities) {
+    for (AssetEntity entity in entities) {
       print(entity.id);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.orientationOf(context) == Orientation.portrait // нормальное положение
+    return MediaQuery.orientationOf(context) ==
+            Orientation.portrait // нормальное положение
         ? Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: _requestAssets,
-          child: const Icon(Icons.developer_board),
-        ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _requestAssets,
+              child: const Icon(Icons.developer_board),
+            ),
             body: navigationShell,
             bottomNavigationBar: NavigationBar(
                 elevation: 3,
@@ -79,53 +77,57 @@ class HomeScreen extends StatelessWidget {
                         icon: destinations[index].icon,
                         label: destinations[index].label,
                         selectedIcon: destinations[index].selectedIcon))))
-        : Scaffold( // ютуб-положение
-      floatingActionButton: FloatingActionButton(
-        onPressed: _requestAssets,
-        child: const Icon(Icons.developer_board),
-      ),
-            appBar: AppBar(
-              elevation: 1,
-              scrolledUnderElevation: 3,
-              title: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.landscape),
-                    SizedBox(width: 28),
-                    Text("Beshence Gallery"),
-                  ],
-                ),
-              ),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle_outlined, size: 32)),
-                const SizedBox(width: 4),
-              ],
+        : Scaffold(
+            // ютуб-положение
+            floatingActionButton: FloatingActionButton(
+              onPressed: _requestAssets,
+              child: const Icon(Icons.developer_board),
             ),
             body: Row(
               children: [
-                Column(mainAxisSize: MainAxisSize.min, children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Material(
-                      child: NavigationRail(
-                        backgroundColor: ElevationOverlay.applySurfaceTint(Theme.of(context).colorScheme.background, Theme.of(context).colorScheme.surfaceTint, 1),
-                        labelType: NavigationRailLabelType.selected,
-                        selectedIndex: navigationShell.currentIndex,
-                        onDestinationSelected: (int index) =>
-                            _onTap(context, index),
-                        destinations: List.generate(
-                          destinations.length,
-                          (index) => NavigationRailDestination(
-                            icon: destinations[index].icon,
-                            label: Text(destinations[index].label),
-                            selectedIcon: destinations[index].selectedIcon,
+                Stack(
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(height: kToolbarHeight,),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: NavigationRail(
+                              backgroundColor: ElevationOverlay.applySurfaceTint(
+                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surfaceTint,
+                                  3),
+                              labelType: NavigationRailLabelType.selected,
+                              selectedIndex: navigationShell.currentIndex,
+                              onDestinationSelected: (int index) =>
+                                  _onTap(context, index),
+                              destinations: List.generate(
+                                destinations.length,
+                                    (index) => NavigationRailDestination(
+                                  icon: destinations[index].icon,
+                                  label: Text(destinations[index].label),
+                                  selectedIcon: destinations[index].selectedIcon,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ),
-                ]),
+                      Container(
+                        color: ElevationOverlay.applySurfaceTint(
+                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surfaceTint,
+                            3),
+                        height:
+                        MediaQuery.of(context).padding.top + kToolbarHeight,
+                        width: 80,
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).padding.top),
+                            child: const Icon(Icons.landscape)),
+                      ),
+                    ]
+                ),
                 Expanded(child: navigationShell)
               ],
             ),
