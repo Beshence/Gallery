@@ -44,17 +44,6 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
           CustomScrollView(
               slivers: [
                 HomeAppBar(title: "Timeline", floating: MediaQuery.orientationOf(context) == Orientation.portrait),
-                /*SliverPersistentHeader(
-                  pinned: true,
-                  floating: false,
-                  delegate: _FloatingHeaderDelegate(
-                    child: Container(
-                      color: Colors.amber,
-                      alignment: Alignment.center,
-                      child: const Text('Floating Header'),
-                    ),
-                  ),
-                ),*/
                 SliverList(
                   delegate: SliverChildListDelegate(
                       flatten([
@@ -91,22 +80,6 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                         List.generate(100, (index) => [Text("$index"), DynamicGridView(maxWidthOnPortrait: 100, maxWidthOnLandscape: 150, sliver: false, spaceBetween: 2, children: List.generate(Random().nextInt(9)+2, (index) => Container(color: Color.fromARGB(255, Random().nextInt(255), Random.secure().nextInt(255), Random().nextInt(255)))))])]).cast()
                   )
                 ),
-                /*SliverPersistentHeader(
-                  pinned: true,
-                  floating: false,
-                  delegate: _FloatingHeaderDelegate(
-                    child: Container(
-                      color: Colors.blue,
-                      alignment: Alignment.center,
-                      child: const Text('Floating Header'),
-                    ),
-                  ),
-                ),
-                SliverList(
-                    delegate: SliverChildListDelegate(
-                        flatten(List.generate(100, (index) => [Text("$index"), DynamicGridView(maxWidthOnPortrait: 100, maxWidthOnLandscape: 150, sliver: false, spaceBetween: 2, children: List.generate(Random().nextInt(9)+2, (index) => Container(color: Color.fromARGB(255, Random().nextInt(255), Random.secure().nextInt(255), Random().nextInt(255)))))])).cast()
-                    )
-                ),*/
               ]
           ),
         ],

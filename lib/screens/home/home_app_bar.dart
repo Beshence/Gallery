@@ -20,9 +20,12 @@ class HomeAppBar extends StatelessWidget {
       floating: floating,
       pinned: !floating,
       actions: [
-        //IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle_outlined, size: 32)),
-        //const SizedBox(width: 4),
-        PopupMenuItem(child: Icon(Icons.account_circle_outlined, size: 32), onTap: () {},)
+        IconButton(
+          icon: const Icon(Icons.account_circle_outlined),
+          tooltip: 'Comment Icon',
+          onPressed: () {},
+        ),
+        const SizedBox(width: 4),
       ],
     );
   }
