@@ -38,6 +38,8 @@ dependencies:
   go_router: ^14.6.2
   dynamic_color: ^1.7.0
   photo_manager: ^3.6.3
+  drift: ^2.22.1
+  drift_flutter: ^0.2.2
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +51,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  drift_dev: ^2.22.1
+  build_runner: ^2.4.13
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

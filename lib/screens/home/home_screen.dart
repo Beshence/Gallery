@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 import 'fragments/library_fragment.dart';
 import 'fragments/search_fragment.dart';
@@ -22,53 +21,18 @@ class HomeScreen extends StatelessWidget {
 
   final StatefulNavigationShell navigationShell;
 
-  Future<void> _requestAssets() async {
-    // Request permissions.
-    final PermissionState ps = await PhotoManager.requestPermissionExtend();
-
-    // Further requests can be only proceed with authorized or limited.
-    if (!ps.hasAccess) {
-      print('Permission is not accessible.');
-      return;
-    }
-    // Customize your own filter options.
-    final PMFilter filter = FilterOptionGroup(
-      imageOption: const FilterOption(
-        sizeConstraint: SizeConstraint(ignoreSize: true),
-      ),
-    );
-    // Obtain assets using the path entity.
-    final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList();
-    // Return if not paths found.
-    if (paths.isEmpty) {
-      print('No paths found.');
-      return;
-    }
-    var _path = paths.first;
-    var _totalEntitiesCount = await _path.assetCountAsync;
-    final List<AssetEntity> entities = await _path.getAssetListPaged(
-      page: 0,
-      size: 1000,
-    );
-    print(_path);
-    print(_totalEntitiesCount);
-    for (AssetEntity entity in entities) {
-      print(entity.id);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return MediaQuery.orientationOf(context) ==
             Orientation.portrait // нормальное положение
         ? Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: _requestAssets,
-              child: const Icon(Icons.developer_board),
-            ),
             body: navigationShell,
             bottomNavigationBar: NavigationBar(
-                elevation: 3,
+                backgroundColor: ElevationOverlay.applySurfaceTint(
+                    Theme.of(context).colorScheme.surface,
+                    Theme.of(context).colorScheme.surfaceTint,
+                    3),
                 onDestinationSelected: (int index) => _onTap(context, index),
                 selectedIndex: navigationShell.currentIndex,
                 destinations: List.generate(
@@ -79,10 +43,6 @@ class HomeScreen extends StatelessWidget {
                         selectedIcon: destinations[index].selectedIcon))))
         : Scaffold(
             // ютуб-положение
-            floatingActionButton: FloatingActionButton(
-              onPressed: _requestAssets,
-              child: const Icon(Icons.developer_board),
-            ),
             body: Row(
               children: [
                 Stack(
@@ -94,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                             fit: FlexFit.tight,
                             child: NavigationRail(
                               backgroundColor: ElevationOverlay.applySurfaceTint(
-                                  Theme.of(context).colorScheme.background,
+                                  Theme.of(context).colorScheme.surface,
                                   Theme.of(context).colorScheme.surfaceTint,
                                   3),
                               labelType: NavigationRailLabelType.selected,
@@ -115,20 +75,20 @@ class HomeScreen extends StatelessWidget {
                       ),
                       Container(
                         color: ElevationOverlay.applySurfaceTint(
-                            Theme.of(context).colorScheme.background,
+                            Theme.of(context).colorScheme.surface,
                             Theme.of(context).colorScheme.surfaceTint,
                             3),
                         height:
                         MediaQuery.of(context).padding.top + kToolbarHeight,
-                        width: 80,
+                        width: MediaQuery.of(context).padding.left + 80,
                         child: Padding(
                             padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).padding.top),
+                                top: MediaQuery.of(context).padding.top, left: MediaQuery.of(context).padding.left),
                             child: const Icon(Icons.landscape)),
                       ),
                     ]
                 ),
-                Expanded(child: navigationShell)
+                Expanded(child: SafeArea(top: false, bottom: false, left: false, right: true, child: navigationShell))
               ],
             ),
           );

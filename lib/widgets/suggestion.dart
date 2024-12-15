@@ -9,6 +9,10 @@ class Suggestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: ElevationOverlay.applySurfaceTint(
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.surfaceTint,
+          3),
       margin: EdgeInsets.zero,
       child: Padding(
           padding: const EdgeInsets.all(16),

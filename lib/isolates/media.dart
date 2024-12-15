@@ -2,6 +2,7 @@ import 'dart:isolate';
 
 import 'package:photo_manager/photo_manager.dart';
 
+import '../classes/media.dart';
 import '../misc.dart';
 
 class MediaIsolate extends IsolateHandler {
@@ -41,18 +42,37 @@ class MediaIsolate extends IsolateHandler {
 Future<int> collectMedia() async {
   final PermissionState ps = await PhotoManager.requestPermissionExtend();
   if (!ps.hasAccess) {
-    print('Permission is not accessible.');
     return 0;
   }
-  final List<AssetPathEntity> paths = await PhotoManager.getAssetPathList(onlyAll: true);
-  if (paths.isEmpty) {
-    print('No paths found.');
+  final List<AssetPathEntity> folders = await PhotoManager.getAssetPathList(onlyAll: true);
+  if (folders.isEmpty) {
     return 0;
   }
-  var path = paths.first;
+
+  final mediaDb = MediaDatabase();
+  mediaDb.delete(mediaDb.localMedia);
+
+  for(AssetPathEntity folder in folders) {
+    int currentAssetsCount = 0;
+    int totalAssetsCount = await folder.assetCountAsync;
+    while(currentAssetsCount < totalAssetsCount) {
+      final List<AssetEntity> assets = await folder.getAssetListRange(
+          start: currentAssetsCount,
+          end: currentAssetsCount + 100
+      );
+      for(AssetEntity asset in assets) {
+        currentAssetsCount+=1;
+        await mediaDb.into(mediaDb.localMedia).insert(LocalMediaCompanion.insert(id: asset.id, name: "noname", modifiedAt: asset.modifiedDateTime));
+      }
+    }
+  }
+  List<LocalMediaData> allItems = await mediaDb.select(mediaDb.localMedia).get();
+  return allItems.length;
+  /*var path = paths.first;
   var totalEntitiesCount = await path.assetCountAsync;
-  return totalEntitiesCount;
+
   List<AssetEntity> total_entities = [];
+  int currentEntitiesCount
   while(total_entities.length < totalEntitiesCount) {
     final List<AssetEntity> entities = await path.getAssetListRange(
         start: total_entities.length,
@@ -60,5 +80,5 @@ Future<int> collectMedia() async {
     );
     total_entities.addAll(entities);
   }
-  return total_entities.length;
+  return total_entities.length;*/
 }
