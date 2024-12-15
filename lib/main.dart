@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,13 @@ import 'package:gallery/screens/home/home_screen.dart';
 import 'package:gallery/screens/settings/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import 'isolates/media.dart';
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  MediaIsolate().start();
 
   runApp(const MyApp());
 }
