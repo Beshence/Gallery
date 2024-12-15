@@ -44,7 +44,7 @@ Future<int> collectMedia() async {
   if (!ps.hasAccess) {
     return 0;
   }
-  final List<AssetPathEntity> folders = await PhotoManager.getAssetPathList(onlyAll: true);
+  final List<AssetPathEntity> folders = await PhotoManager.getAssetPathList(hasAll: false);
   if (folders.isEmpty) {
     return 0;
   }
