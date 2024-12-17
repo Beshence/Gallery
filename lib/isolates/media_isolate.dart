@@ -2,8 +2,9 @@ import 'dart:isolate';
 
 import 'package:photo_manager/photo_manager.dart';
 
-import '../classes/media.dart';
+import '../boxes/media_box.dart';
 import '../misc.dart';
+
 
 class MediaIsolate extends IsolateHandler {
   @override
@@ -14,33 +15,40 @@ class MediaIsolate extends IsolateHandler {
       var command = args.removeAt(0);
       switch(command) {
         case "pong":
+          print("pong!");
           isolateSendPort.send("collect");
           break;
         case "collect":
           print("Isolate sent ${int.parse(args[0])}.");
           timelineChangeNotifier.updateTimeline();
+          break;
+        case "partial_collect":
+          timelineChangeNotifier.updateTimeline();
+          break;
       }
     });
   }
 
   @override
   Future<void> isolate(ReceivePort isolateReceivePort, SendPort mainSendPort) async {
+    MediaBox mediaBox = await MediaBox.create();
     isolateReceivePort.listen((message) async {
       List<String> args = message.split(".");
       var command = args.removeAt(0);
       switch(command) {
         case "ping":
+          print("ping...");
           mainSendPort.send("pong");
           break;
         case "collect":
-          mainSendPort.send("collect.${await collectMedia()}");
+          mainSendPort.send("collect.${await collectLocalMedia(mainSendPort, mediaBox)}");
           break;
       }
     });
   }
 }
 
-Future<int> collectMedia() async {
+Future<int> collectLocalMedia(SendPort mainSendPort, MediaBox mediaBox) async {
   final PermissionState ps = await PhotoManager.requestPermissionExtend();
   if (!ps.hasAccess) {
     return 0;
@@ -50,24 +58,29 @@ Future<int> collectMedia() async {
     return 0;
   }
 
-  final mediaDb = MediaDatabase();
+  //final mediaDb = MediaDatabase();
+  await mediaBox.dropLocalMedia();
 
   for(AssetPathEntity folder in folders) {
     int currentAssetsCount = 0;
     int totalAssetsCount = await folder.assetCountAsync;
     while(currentAssetsCount < totalAssetsCount) {
-      final List<AssetEntity> assets = await folder.getAssetListRange(
+      final List<AssetEntity> rawAssets = await folder.getAssetListRange(
           start: currentAssetsCount,
-          end: currentAssetsCount + 100
+          end: currentAssetsCount + 10
       );
-      for(AssetEntity asset in assets) {
+      List<LocalMedia> assets = [];
+      for(AssetEntity asset in rawAssets) {
         currentAssetsCount+=1;
-        await mediaDb.into(mediaDb.localMedia).insert(LocalMediaCompanion.insert(id: asset.id, name: "noname", modifiedAt: asset.modifiedDateTime));
+        assets.add(LocalMedia(id: asset.id, folder: folder.name, modifiedAt: asset.modifiedDateTime));
+        //await mediaBox.addLocalMedia(asset.id, folder.name, asset.modifiedDateTime);
+        //await mediaDb.into(mediaDb.localMedia).insert(LocalMediaCompanion.insert(id: asset.id, name: "noname", modifiedAt: asset.modifiedDateTime));
       }
+      await mediaBox.addAllLocalMedia(assets);
+      mainSendPort.send("partial_collect");
     }
   }
-  List<LocalMediaData> allItems = await mediaDb.select(mediaDb.localMedia).get();
-  return allItems.length;
+  return mediaBox.localMediaLength();
   /*var path = paths.first;
   var totalEntitiesCount = await path.assetCountAsync;
 

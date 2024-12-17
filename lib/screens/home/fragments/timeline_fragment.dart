@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:gallery/boxes/media_box.dart';
+import 'package:gallery/main.dart';
 import 'package:gallery/misc.dart';
 
-import '../../../classes/media.dart';
 import '../../../widgets/dynamic_grid.dart';
 import '../../../widgets/suggestion.dart';
 import '../home_app_bar.dart';
@@ -13,27 +14,6 @@ class HomeScreenTimelineFragment extends StatefulWidget {
 
   @override
   State<HomeScreenTimelineFragment> createState() => _HomeScreenTimelineFragmentState();
-}
-
-class _FloatingHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-
-  _FloatingHeaderDelegate({required this.child});
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return child;
-  }
-
-  @override
-  double get maxExtent => 60.0; // Высота заголовка
-  @override
-  double get minExtent => 60.0;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true; // Указывается, нужно ли пересоздавать заголовок
-  }
 }
 
 class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment> {
@@ -48,17 +28,14 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                 ListenableBuilder(
                   listenable: timelineChangeNotifier,
                   builder: (BuildContext context, Widget? child) {
-                    List<Widget> items = [];
-                    final mediaDb = MediaDatabase();
-
                     return FutureBuilder(
-                      future: mediaDb.select(mediaDb.localMedia).get(),
+                      future: mediaBox.getAllLocalMediaSorted(),
                       initialData: [],
                       builder: (context, snapshot) {
                         List<Widget> localItems = <Widget>[];
                         if(snapshot.hasData) {
-                          for(LocalMediaData item in snapshot.data!) {
-                            localItems.add(Container(child: Text(item.id),));
+                          for(LocalMedia item in snapshot.data!) {
+                            localItems.add(Container(child: Text("${item.id}\n${item.modifiedAt}"),));
                           }
                         }
                         return SliverList(

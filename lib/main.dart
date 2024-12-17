@@ -8,11 +8,15 @@ import 'package:gallery/screens/home/home_screen.dart';
 import 'package:gallery/screens/settings/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import 'isolates/media.dart';
+import 'boxes/media_box.dart';
+import 'isolates/media_isolate.dart';
 
+late MediaBox mediaBox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  mediaBox = await MediaBox.create();
 
   MediaIsolate().start();
 
