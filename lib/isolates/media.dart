@@ -18,6 +18,7 @@ class MediaIsolate extends IsolateHandler {
           break;
         case "collect":
           print("Isolate sent ${int.parse(args[0])}.");
+          timelineChangeNotifier.updateTimeline();
       }
     });
   }
@@ -50,7 +51,6 @@ Future<int> collectMedia() async {
   }
 
   final mediaDb = MediaDatabase();
-  mediaDb.delete(mediaDb.localMedia);
 
   for(AssetPathEntity folder in folders) {
     int currentAssetsCount = 0;

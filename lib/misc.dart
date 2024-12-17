@@ -1,15 +1,25 @@
 import 'dart:isolate';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-List<dynamic> flatten(List<dynamic> list) {
-  return list.expand((element) {
+List<Widget> flatten(List<dynamic> list) {
+  List<Widget> temp = [];
+  for(dynamic item in list) {
+    if(item is List) {
+      temp.addAll(flatten(item));
+    } else {
+      temp.add(item);
+    }
+  }
+  return temp;
+  /*return list.expand((element) {
     if (element is List) {
       return flatten(element);
     } else {
       return [element];
     }
-  }).toList();
+  }).toList();*/
 }
 
 class IsolateHandler {
@@ -57,3 +67,34 @@ class IsolateHandler {
   Future<void> isolate(ReceivePort isolateReceivePort, SendPort mainSendPort) async {}
 
 }
+
+class TimelineChangeNotifier extends ChangeNotifier {
+  /*
+  /// Внутреннее приватное состояние корзины.
+  final List<Item> _items = [];
+
+  /// Неизменяемое представление товаров в корзине.
+  UnmodifiableListView<Item> get items => UnmodifiableListView(_items);
+
+  /// Текущая общая цена всех предметов (при условии, что все предметы стоят по 42 доллара).
+  int get totalPrice => _items.length * 42;
+
+  /// Добавляет [item] в корзину. Это и [removeAll] - единственные способы изменить корзину снаружи.
+  void add(Item item) {
+    _items.add(item);
+    // Этот вызов сообщает виджетам, которые слушают эту модель, о необходимости перестроения.
+    notifyListeners();
+  }
+
+  /// Удаляет все товары из корзины.
+  void removeAll() {
+    _items.clear();
+    // Этот вызов сообщает виджетам, которые слушают эту модель, о необходимости перестроения.
+    notifyListeners();
+  }*/
+  void updateTimeline() {
+    notifyListeners();
+  }
+}
+
+TimelineChangeNotifier timelineChangeNotifier = TimelineChangeNotifier();

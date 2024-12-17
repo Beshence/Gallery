@@ -17,6 +17,10 @@ class LocalMedia extends Table {
   TextColumn get id => text()();
   TextColumn get name => text()();
   DateTimeColumn get modifiedAt => dateTime()();
+
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 // Таблица, которая показывает
