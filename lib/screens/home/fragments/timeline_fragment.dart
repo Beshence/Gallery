@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -35,7 +36,11 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                         List<Widget> localItems = <Widget>[];
                         if(snapshot.hasData) {
                           for(LocalMedia item in snapshot.data!) {
-                            localItems.add(Container(child: Text("${item.id}\n${item.modifiedAt}"),));
+                            try {
+                              localItems.add(Image.memory(File(item.filePath).readAsBytesSync(), fit: BoxFit.cover,));
+                            } catch(e) {
+                              localItems.add(Text("error: ${item.id} ${item.modifiedAt}"));
+                            }
                           }
                         }
                         return SliverList(

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1395603826646173581",
-      "lastPropertyId": "4:8313232054194860331",
+      "lastPropertyId": "7:4150768301432586334",
       "name": "LocalMedia",
       "properties": [
         {
@@ -30,20 +30,54 @@
           "id": "4:8313232054194860331",
           "name": "modifiedAt",
           "type": 10
+        },
+        {
+          "id": "7:4150768301432586334",
+          "name": "filePath",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:4099167492744733647",
+      "lastPropertyId": "3:5254276524996979733",
+      "name": "LocalFolder",
+      "properties": [
+        {
+          "id": "1:1698954292945670266",
+          "name": "objectBoxId",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3708581448785267892",
+          "name": "id",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "2:8705948298124920227"
+        },
+        {
+          "id": "3:5254276524996979733",
+          "name": "name",
+          "type": 9
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "1:1395603826646173581",
-  "lastIndexId": "1:6525581546453560848",
+  "lastEntityId": "2:4099167492744733647",
+  "lastIndexId": "2:8705948298124920227",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    182418256967310136,
+    3322817588226861660
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

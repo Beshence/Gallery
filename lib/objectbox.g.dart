@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 1395603826646173581),
       name: 'LocalMedia',
-      lastPropertyId: const obx_int.IdUid(4, 8313232054194860331),
+      lastPropertyId: const obx_int.IdUid(7, 4150768301432586334),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -45,6 +45,36 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(4, 8313232054194860331),
             name: 'modifiedAt',
             type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 4150768301432586334),
+            name: 'filePath',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(2, 4099167492744733647),
+      name: 'LocalFolder',
+      lastPropertyId: const obx_int.IdUid(3, 5254276524996979733),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1698954292945670266),
+            name: 'objectBoxId',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 3708581448785267892),
+            name: 'id',
+            type: 9,
+            flags: 2080,
+            indexId: const obx_int.IdUid(2, 8705948298124920227)),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 5254276524996979733),
+            name: 'name',
+            type: 9,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -86,13 +116,13 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 1395603826646173581),
-      lastIndexId: const obx_int.IdUid(1, 6525581546453560848),
+      lastEntityId: const obx_int.IdUid(2, 4099167492744733647),
+      lastIndexId: const obx_int.IdUid(2, 8705948298124920227),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredPropertyUids: const [182418256967310136, 3322817588226861660],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -110,11 +140,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectToFB: (LocalMedia object, fb.Builder fbb) {
           final idOffset = fbb.writeString(object.id);
           final folderOffset = fbb.writeString(object.folder);
-          fbb.startTable(5);
+          final filePathOffset = fbb.writeString(object.filePath);
+          fbb.startTable(8);
           fbb.addInt64(0, object.objectBoxId);
           fbb.addOffset(1, idOffset);
           fbb.addOffset(2, folderOffset);
           fbb.addInt64(3, object.modifiedAt.millisecondsSinceEpoch);
+          fbb.addOffset(6, filePathOffset);
           fbb.finish(fbb.endTable());
           return object.objectBoxId;
         },
@@ -129,11 +161,46 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 8, '');
           final modifiedAtParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0));
+          final filePathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 16, '');
           final object = LocalMedia(
               objectBoxId: objectBoxIdParam,
               id: idParam,
               folder: folderParam,
-              modifiedAt: modifiedAtParam);
+              modifiedAt: modifiedAtParam,
+              filePath: filePathParam);
+
+          return object;
+        }),
+    LocalFolder: obx_int.EntityDefinition<LocalFolder>(
+        model: _entities[1],
+        toOneRelations: (LocalFolder object) => [],
+        toManyRelations: (LocalFolder object) => {},
+        getId: (LocalFolder object) => object.objectBoxId,
+        setId: (LocalFolder object, int id) {
+          object.objectBoxId = id;
+        },
+        objectToFB: (LocalFolder object, fb.Builder fbb) {
+          final idOffset = fbb.writeString(object.id);
+          final nameOffset = fbb.writeString(object.name);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.objectBoxId);
+          fbb.addOffset(1, idOffset);
+          fbb.addOffset(2, nameOffset);
+          fbb.finish(fbb.endTable());
+          return object.objectBoxId;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final objectBoxIdParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final idParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final object = LocalFolder(
+              objectBoxId: objectBoxIdParam, id: idParam, name: nameParam);
 
           return object;
         })
@@ -159,4 +226,23 @@ class LocalMedia_ {
   /// See [LocalMedia.modifiedAt].
   static final modifiedAt =
       obx.QueryDateProperty<LocalMedia>(_entities[0].properties[3]);
+
+  /// See [LocalMedia.filePath].
+  static final filePath =
+      obx.QueryStringProperty<LocalMedia>(_entities[0].properties[4]);
+}
+
+/// [LocalFolder] entity fields to define ObjectBox queries.
+class LocalFolder_ {
+  /// See [LocalFolder.objectBoxId].
+  static final objectBoxId =
+      obx.QueryIntegerProperty<LocalFolder>(_entities[1].properties[0]);
+
+  /// See [LocalFolder.id].
+  static final id =
+      obx.QueryStringProperty<LocalFolder>(_entities[1].properties[1]);
+
+  /// See [LocalFolder.name].
+  static final name =
+      obx.QueryStringProperty<LocalFolder>(_entities[1].properties[2]);
 }
