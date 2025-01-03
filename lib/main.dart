@@ -35,7 +35,6 @@ GoRouter router = GoRouter(
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -44,18 +43,18 @@ class MyApp extends StatelessWidget {
 
     return DynamicColorBuilder(
         builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-          ColorScheme lightColorScheme = lightDynamic?.harmonized() ??
-              ColorScheme.fromSeed(seedColor: Colors.green);
-          ColorScheme darkColorScheme = darkDynamic?.harmonized() ??
-              ColorScheme.fromSeed(
-                  seedColor: Colors.green, brightness: Brightness.dark);
-          return MaterialApp.router(
-            routerConfig: router,
-            title: 'Gallery',
-            theme: ThemeData(colorScheme: lightColorScheme),
-            darkTheme: ThemeData(colorScheme: darkColorScheme),
-            themeMode: ThemeMode.system,
-          );
-        });
+      ColorScheme lightColorScheme = lightDynamic?.harmonized() ??
+          ColorScheme.fromSeed(seedColor: Colors.green);
+      ColorScheme darkColorScheme = darkDynamic?.harmonized() ??
+          ColorScheme.fromSeed(
+              seedColor: Colors.green, brightness: Brightness.dark);
+      return MaterialApp.router(
+        routerConfig: router,
+        title: 'Gallery',
+        theme: ThemeData(colorScheme: lightColorScheme),
+        darkTheme: ThemeData(colorScheme: darkColorScheme),
+        themeMode: ThemeMode.system,
+      );
+    });
   }
 }
