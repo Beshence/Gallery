@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../home/home_app_bar.dart';
-
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -13,9 +11,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) {},
+            itemBuilder: (BuildContext context) {
+              return {"Settings"}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
+        centerTitle: true,
+        title: Text("Settings"),
+      ),
       body: CustomScrollView(
           slivers: [
-            const HomeAppBar(title: "Settings"),
             SliverList(
               delegate: SliverChildListDelegate(
                   [

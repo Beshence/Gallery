@@ -23,7 +23,7 @@ Future<void> main() async {
 }
 
 GoRouter router = GoRouter(
-  initialLocation: "/timeline",
+  initialLocation: "/",
   routes: [
     homeScreenRoute,
     GoRoute(
