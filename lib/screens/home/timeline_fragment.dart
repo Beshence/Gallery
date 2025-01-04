@@ -89,12 +89,7 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                           delegate: SliverChildListDelegate(
                               flatten([
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 0,
-                                      top: 16,
-                                      right: 16,
-                                      left: 16
-                                  ),
+                                  padding: const EdgeInsets.all(16),
                                   child: Card(
                                     margin: EdgeInsets.zero,
                                     elevation: 0,
