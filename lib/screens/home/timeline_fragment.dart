@@ -168,13 +168,12 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                                                   .of(context)
                                                                   .colorScheme
                                                                   .onPrimary,
-                                                              fontWeight: FontWeight
-                                                                  .bold
                                                           )
                                                       ),
                                                       const SizedBox(
                                                         width: 16,),
                                                       IconButton(
+                                                        tooltip: "Hide suggestions",
                                                         icon: const Icon(
                                                             Icons.close),
                                                         onPressed: () => {},
@@ -188,7 +187,7 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                                   Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
-                                                        horizontal: 12,
+                                                        horizontal: 4,
                                                         vertical: 12),
                                                     child: Text(
                                                         "There are some things that need to be set up to ensure the best experience:",
@@ -329,8 +328,6 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                     ),
                                   ),
                                 ),
-                                const Padding(padding: EdgeInsets.all(16),
-                                  child: Text("Today"),),
                                 DynamicGridView(
                                     maxWidthOnPortrait: 100,
                                     maxWidthOnLandscape: 150,
