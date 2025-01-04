@@ -7,7 +7,6 @@ import '../../boxes/media_box.dart';
 import '../../main.dart';
 import '../../misc.dart';
 import '../../widgets/dynamic_grid.dart';
-import '../../widgets/suggestion.dart';
 import '../../widgets/wavy_divider.dart';
 import 'home_screen.dart';
 
@@ -33,10 +32,15 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 16/*button*/+4/*padding next to button*/+32/*idk*/),
+                  const SizedBox(
+                      width: 16 /*button*/ + 4 /*padding next to button*/ +
+                          32 /*idk*/),
                   const Text("Beshence Gallery"),
                   const SizedBox(width: 12,),
-                  Icon(Icons.cloud_off_outlined, size: 16, color: Theme.of(context).colorScheme.secondary,)
+                  Icon(Icons.cloud_off_outlined, size: 16, color: Theme
+                      .of(context)
+                      .colorScheme
+                      .secondary,)
                 ],
               ),
               centerTitle: true,
@@ -61,15 +65,18 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
               builder: (BuildContext context, Widget? child) {
                 return FutureBuilder(
                   future: mediaBox.getAllLocalMediaSorted(),
-                  initialData: [],
+                  initialData: const [],
                   builder: (context, snapshot) {
                     List<Widget> localItems = <Widget>[];
-                    if(snapshot.hasData) {
-                      for(LocalMedia item in snapshot.data!) {
+                    if (snapshot.hasData) {
+                      for (LocalMedia item in snapshot.data!) {
                         try {
-                          localItems.add(Image.memory(File(item.filePath).readAsBytesSync(), fit: BoxFit.cover,));
-                        } catch(e) {
-                          localItems.add(Text("error: ${item.id} ${item.modifiedAt}"));
+                          localItems.add(Image.memory(
+                            File(item.filePath).readAsBytesSync(),
+                            fit: BoxFit.cover,));
+                        } catch (e) {
+                          localItems.add(
+                              Text("error: ${item.id} ${item.modifiedAt}"));
                         }
                       }
                     }
@@ -81,73 +88,249 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                       sliver: SliverList(
                           delegate: SliverChildListDelegate(
                               flatten([
-                                if(true) Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Center(
-                                                child: Column(
-                                                  children: [
-                                                    const Icon(Icons.landscape, size: 32,),
-                                                    const SizedBox(height: 24,),
-                                                    RichText(
-                                                        text: TextSpan(
-                                                            style: TextStyle(fontSize: 24, height: 1.25, color: Theme.of(context).colorScheme.onPrimaryContainer),
-                                                            text: "Welcome to\n",
-                                                            children: const [
-                                                              TextSpan(
-                                                                  text: "Beshence Gallery",
-                                                                  style: TextStyle(fontWeight: FontWeight.bold)
-                                                              ),
-                                                              TextSpan(text: "!")
-                                                            ]
-                                                        ),
-                                                        textAlign: TextAlign.center),
-                                                    const SizedBox(height: 16,),
-                                                    Text(
-                                                        "Let's start with these recommendations:",
-                                                        style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
-                                                        textAlign: TextAlign.center),
-                                                    const SizedBox(height: 24,),
-                                                  ],
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 0,
+                                      top: 16,
+                                      right: 16,
+                                      left: 16
+                                  ),
+                                  child: Card(
+                                    margin: EdgeInsets.zero,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(32)
+                                    ),
+                                    color: ElevationOverlay.applySurfaceTint(
+                                        Theme
+                                            .of(context)
+                                            .colorScheme
+                                            .surface,
+                                        Theme
+                                            .of(context)
+                                            .colorScheme
+                                            .surfaceTint,
+                                        3
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .stretch,
+                                      children: [
+                                        Card(
+                                            margin: EdgeInsets.zero,
+                                            elevation: 0,
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(32),
+                                                  topRight: Radius.circular(32),
                                                 )
                                             ),
-                                            DynamicGridView(
-                                                maxWidthOnPortrait: 300,
-                                                maxWidthOnLandscape: 400,
-                                                sliver: false,
-                                                height: const DynamicGridViewHeight.fixed(84),
-                                                spaceBetween: 16,
+                                            color: Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .primary,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(
+                                                  16.0),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment
+                                                    .start,
                                                 children: [
-                                                  if (/*suggestions.contains("permission")*/true) Suggestion(
-                                                      icon: Icon(Icons.lightbulb_outlined, color: Theme.of(context).textTheme.bodySmall?.color),
-                                                      title: "Give access to your photos and videos",
-                                                      button: IconButton.filled(onPressed: () => {}, icon: const Icon(Icons.navigate_next)),
-                                                      cancelButton: IconButton(icon: const Icon(Icons.close), onPressed: () => {}/*setState(() => suggestions.remove("permission"))*/)
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          IconButton.filled(
+                                                              onPressed: null,
+                                                              icon: Icon(
+                                                                Icons.landscape,
+                                                                color: Theme
+                                                                    .of(context)
+                                                                    .colorScheme
+                                                                    .onPrimary,
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 16,),
+                                                      Text.rich(
+                                                          const TextSpan(
+                                                              text: "Welcome!"
+                                                          ),
+                                                          style: Theme
+                                                              .of(context)
+                                                              .textTheme
+                                                              .titleLarge
+                                                              ?.copyWith(
+                                                              color: Theme
+                                                                  .of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                              fontWeight: FontWeight
+                                                                  .bold
+                                                          )
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 16,),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                            Icons.close),
+                                                        onPressed: () => {},
+                                                        color: Theme
+                                                            .of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                      )
+                                                    ],
                                                   ),
-                                                  if(/*suggestions.contains("account")*/true) Suggestion(
-                                                      icon: Icon(Icons.lightbulb_outlined, color: Theme.of(context).textTheme.bodySmall?.color),
-                                                      title: "Sign in to synchronise",
-                                                      button: IconButton.filled(onPressed: () => {}, icon: const Icon(Icons.navigate_next)),
-                                                      cancelButton: IconButton(icon: const Icon(Icons.close), onPressed: () => {}/*setState(() => suggestions.remove("account"))*/)
+                                                  Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 12),
+                                                    child: Text(
+                                                        "There are some things that need to be set up to ensure the best experience:",
+                                                        style: Theme
+                                                            .of(context)
+                                                            .textTheme
+                                                            .bodyMedium
+                                                            ?.copyWith(
+                                                            color: Theme
+                                                                .of(context)
+                                                                .colorScheme
+                                                                .onPrimary
+                                                        ),
+                                                        textAlign: TextAlign
+                                                            .start),
                                                   ),
-                                                ]
-                                            ),
-                                          ]
-                                      ),
+                                                ],
+                                              ),
+                                            )
+                                        ),
+                                        WavyDivider(
+                                          color: ElevationOverlay
+                                              .applySurfaceTint(
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surfaceTint,
+                                              0
+                                          ),
+                                          height: 2,
+                                          wavelength: 32,
+                                          width: 4,
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Row(
+                                              key: const Key("suggestions"),
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                IconButton.filled(
+                                                  onPressed: null,
+                                                  icon: const Icon(Icons
+                                                      .photo_library_outlined),
+                                                  disabledColor: Theme
+                                                      .of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                /*Padding(
+                                                  padding: const EdgeInsets.all(12.0),
+                                                  child: Icon(Icons.photo_library_outlined, color: Theme.of(context).colorScheme.onSurface),
+                                                ),*/
+                                                const SizedBox(width: 16),
+                                                const Expanded(child: Text(
+                                                    "Give access to your photos and videos",
+                                                    softWrap: true)),
+                                                const SizedBox(width: 4),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .end,
+                                                  children: [
+                                                    IconButton(icon: const Icon(
+                                                        Icons.close),
+                                                        onPressed: () =>
+                                                        {
+                                                        } /*setState(() => suggestions.remove("account"))*/),
+                                                    const SizedBox(width: 4),
+                                                    IconButton.filled(
+                                                        onPressed: () => {},
+                                                        icon: const Icon(Icons
+                                                            .navigate_next))
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                        ),
+                                        Container(
+                                          color: ElevationOverlay
+                                              .applySurfaceTint(
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surfaceTint,
+                                              0
+                                          ),
+                                          width: double.infinity,
+                                          height: 4,
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                IconButton.filled(
+                                                  onPressed: null,
+                                                  icon: const Icon(
+                                                      Icons.cloud_outlined),
+                                                  disabledColor: Theme
+                                                      .of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                const SizedBox(width: 16),
+                                                const Expanded(child: Text(
+                                                    "Turn on media backup and synchronisation",
+                                                    softWrap: true)),
+                                                const SizedBox(width: 4),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .end,
+                                                  children: [
+                                                    IconButton(icon: const Icon(
+                                                        Icons.close),
+                                                        onPressed: () =>
+                                                        {
+                                                        } /*setState(() => suggestions.remove("account"))*/),
+                                                    const SizedBox(width: 4),
+                                                    IconButton.filled(
+                                                        onPressed: () => {},
+                                                        icon: const Icon(Icons
+                                                            .navigate_next))
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                        ),
+                                      ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 16),
-                                      child: SizedBox(
-                                        child: WavyDivider(height: 2, color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(100), wavelength: 20,),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                                const Padding(padding: EdgeInsets.all(16), child: Text("Today"),),
+                                const Padding(padding: EdgeInsets.all(16),
+                                  child: Text("Today"),),
                                 DynamicGridView(
                                     maxWidthOnPortrait: 100,
                                     maxWidthOnLandscape: 150,
@@ -156,7 +339,10 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                     children: List.generate(
                                         localItems.length, (index) =>
                                         Container(
-                                            color: Color.fromARGB(255, Random().nextInt(255), Random.secure().nextInt(255), Random().nextInt(255)
+                                            color: Color.fromARGB(
+                                                255, Random().nextInt(255),
+                                                Random.secure().nextInt(255),
+                                                Random().nextInt(255)
                                             ),
                                             child: localItems[index]
                                         )
