@@ -180,8 +180,22 @@ class HomeFragment extends StatelessWidget {
         left: false,
         right: true,
         bottom: false,
-        child: body != null ? body! : const SizedBox.shrink()
-      ) : body
+        child: body != null ? MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            removeBottom: true,
+            removeRight: true,
+            removeLeft: true,
+            child: body != null ? body! : const SizedBox.shrink()
+        ) : const SizedBox.shrink()
+      ) : MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          removeBottom: true,
+          removeRight: true,
+          removeLeft: true,
+          child: body != null ? body! : const SizedBox.shrink()
+      )
     );
   }
 

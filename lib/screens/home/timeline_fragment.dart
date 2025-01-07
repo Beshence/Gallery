@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../boxes/media_box.dart';
+import '../../boxes/media_box_v1.dart';
 import '../../main.dart';
 import '../../misc.dart';
 import '../../widgets/dynamic_grid.dart';
@@ -63,20 +63,24 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
             ListenableBuilder(
               listenable: timelineChangeNotifier,
               builder: (BuildContext context, Widget? child) {
+                /*return SliverList(
+                  delegate: SliverChildListDelegate([]),
+                );*/
                 return FutureBuilder(
-                  future: mediaBox.getAllLocalMediaSorted(),
+                  future: mediaBox.getShownMediaSortedAsync(),
                   initialData: const [],
                   builder: (context, snapshot) {
                     List<Widget> localItems = <Widget>[];
                     if (snapshot.hasData) {
-                      for (LocalMedia item in snapshot.data!) {
+                      for (MediaV1 item in snapshot.data!) {
                         try {
+                          //localItems.add(Text("${item.name} ${item.date}", style: const TextStyle(fontSize: 12),));
                           localItems.add(Image.memory(
-                            File(item.filePath).readAsBytesSync(),
+                            File("${TemporaryDirectory.of(context).temp.path}/thumbnails/${item.id}.jpg").readAsBytesSync(),
                             fit: BoxFit.cover,));
                         } catch (e) {
                           localItems.add(
-                              Text("error: ${item.id} ${item.modifiedAt}"));
+                              Text("error ${item.name} ${item.date}"));
                         }
                       }
                     }
@@ -289,6 +293,61 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                                 IconButton.filled(
                                                   onPressed: null,
                                                   icon: const Icon(
+                                                      Icons.visibility_outlined),
+                                                  disabledColor: Theme
+                                                      .of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                ),
+                                                const SizedBox(width: 16),
+                                                const Expanded(child: Text(
+                                                    "Choose which folders to show in timeline",
+                                                    softWrap: true)),
+                                                const SizedBox(width: 4),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .end,
+                                                  children: [
+                                                    IconButton(icon: const Icon(
+                                                        Icons.close),
+                                                        onPressed: () =>
+                                                        {
+                                                        } /*setState(() => suggestions.remove("account"))*/),
+                                                    const SizedBox(width: 4),
+                                                    IconButton.filled(
+                                                        onPressed: () => {},
+                                                        icon: const Icon(Icons
+                                                            .navigate_next))
+                                                  ],
+                                                )
+                                              ],
+                                            )
+                                        ),
+                                        Container(
+                                          color: ElevationOverlay
+                                              .applySurfaceTint(
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surface,
+                                              Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .surfaceTint,
+                                              0
+                                          ),
+                                          width: double.infinity,
+                                          height: 4,
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.all(16),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                IconButton.filled(
+                                                  onPressed: null,
+                                                  icon: const Icon(
                                                       Icons.cloud_outlined),
                                                   disabledColor: Theme
                                                       .of(context)
@@ -323,6 +382,7 @@ class _HomeScreenTimelineFragmentState extends State<HomeScreenTimelineFragment>
                                     ),
                                   ),
                                 ),
+                                const SizedBox(height: 8,),
                                 DynamicGridView(
                                     maxWidthOnPortrait: 100,
                                     maxWidthOnLandscape: 150,

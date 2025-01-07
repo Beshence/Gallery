@@ -12,7 +12,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.add)),
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {},
@@ -27,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
         centerTitle: true,
-        title: Text("Settings"),
+        title: const Text("Settings"),
       ),
       body: CustomScrollView(
           slivers: [

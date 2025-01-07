@@ -7,7 +7,7 @@ class WavyDivider extends StatelessWidget {
   final Color color;
   final double wavelength;
 
-  WavyDivider({
+  const WavyDivider({super.key,
     this.width = 1.0,
     this.height = 20.0,
     this.color = Colors.black,
